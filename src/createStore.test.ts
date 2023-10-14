@@ -18,6 +18,15 @@ describe("store", () => {
     expect(store.getState()).toBe(nextState);
   });
 
+  it("sets state with partial value", () => {
+    const initialState = { name: "icecream", count: 0 };
+    const store = createStore(initialState);
+
+    store.setState({ count: 1 });
+
+    expect(store.getState()).toEqual({ name: "icecream", count: 1 });
+  });
+
   it("sets non-object state with updater", () => {
     const initialState = 0;
     const store = createStore(initialState);

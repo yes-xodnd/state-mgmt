@@ -5,7 +5,7 @@ type Updater<T> = (state: T) => Partial<T>;
 export type Store<T> = {
   subscribe: (listener: (state: T) => void) => () => void;
   getState: () => T;
-  setState: (value: T | Updater<T>) => void;
+  setState: (value: Partial<T> | Updater<T>) => void;
 };
 
 const createStore = <T>(initialState: T): Store<T> => {
@@ -17,22 +17,18 @@ const createStore = <T>(initialState: T): Store<T> => {
     return () => publisher.unsubscribe(listener);
   };
 
-  const isUpdater = (value: T | Updater<T>): value is Updater<T> => {
+  const isUpdater = (value: Partial<T> | Updater<T>): value is Updater<T> => {
     return typeof value === "function";
   };
 
-  const getNextState = (value: T | Updater<T>): T => {
-    if (!isUpdater(value)) {
-      return value;
-    }
-
-    const partialState = value(state);
+  const getNextState = (value: Partial<T> | Updater<T>): T => {
+    const partialState = isUpdater(value) ? value(state) : value;
     return typeof partialState === "object"
       ? { ...state, ...partialState }
       : partialState;
   };
 
-  const setState = (value: T | Updater<T>) => {
+  const setState = (value: Partial<T> | Updater<T>) => {
     const nextState = getNextState(value);
 
     if (Object.is(state, nextState)) {
