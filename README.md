@@ -35,7 +35,7 @@ export useCounterStore = createHook(counterStore);
 import { useCounterStore, counterActions } from './counterStore.ts';
 
 const Counter = () => {
-  const count = useCounterStore();
+  const count = useCounterStore(state => state.count);
 
   return (
     <div>
