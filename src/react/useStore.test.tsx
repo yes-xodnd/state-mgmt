@@ -81,4 +81,71 @@ describe("useStore", () => {
     const text = await findByText("count: 1");
     expect(text).toBeInTheDocument();
   });
+
+  it("does not trigger rerender on non-selected property update", async () => {
+    const formStore = createStore({
+      email: "",
+      password: "",
+    });
+
+    const countEmailRender = jest.fn();
+    const countPasswordRender = jest.fn();
+
+    const EmailInput = () => {
+      const value = useStore(formStore, (state) => state.email);
+
+      React.useEffect(() => {
+        countEmailRender();
+      }, [value]);
+
+      return (
+        <label>
+          email
+          <input
+            value={value}
+            onChange={(e) =>
+              formStore.setState(() => ({ email: e.target.value }))
+            }
+          />
+        </label>
+      );
+    };
+
+    const PasswordInput = () => {
+      const value = useStore(formStore, (state) => state.password);
+
+      React.useEffect(() => {
+        countPasswordRender();
+      }, [value]);
+
+      return (
+        <label>
+          password
+          <input
+            value={value}
+            onChange={(e) =>
+              formStore.setState(() => ({ password: e.target.value }))
+            }
+          />
+        </label>
+      );
+    };
+
+    const { findByLabelText } = render(
+      <div>
+        <EmailInput />
+        <PasswordInput />
+      </div>
+    );
+
+    const password = await findByLabelText("password");
+
+    act(() => {
+      fireEvent.change(password, { target: { value: "a" } });
+      fireEvent.change(password, { target: { value: "b" } });
+    });
+
+    expect(countPasswordRender).toBeCalledTimes(3);
+    expect(countEmailRender).toBeCalledTimes(1);
+  });
 });
