@@ -1,7 +1,7 @@
-import Publisher from "./Publisher";
+import createPublisher from "./createPublisher";
 
 describe("publisher", () => {
-  const publisher = new Publisher();
+  const publisher = createPublisher();
   const event = "EVENT";
 
   it("notifies event to its listeners", () => {

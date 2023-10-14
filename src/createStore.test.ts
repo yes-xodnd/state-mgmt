@@ -1,9 +1,9 @@
-import Store from "./Store";
+import createStore from "./createStore";
 
 describe("store", () => {
   it("gets state", () => {
     const initialState = 0;
-    const store = new Store(initialState);
+    const store = createStore(initialState);
 
     expect(store.getState()).toBe(initialState);
   });
@@ -11,7 +11,7 @@ describe("store", () => {
   it("sets state with value", () => {
     const initialState = 0;
     const nextState = 1;
-    const store = new Store(initialState);
+    const store = createStore(initialState);
 
     store.setState(nextState);
 
@@ -20,7 +20,7 @@ describe("store", () => {
 
   it("sets non-object state with updater", () => {
     const initialState = 0;
-    const store = new Store(initialState);
+    const store = createStore(initialState);
 
     store.setState((state) => state + 1);
 
@@ -35,7 +35,7 @@ describe("store", () => {
     const partialState: Partial<typeof initialState> = {
       age: 1,
     };
-    const store = new Store(initialState);
+    const store = createStore(initialState);
     store.setState(() => partialState);
 
     expect(store.getState()).toMatchObject({
@@ -45,7 +45,7 @@ describe("store", () => {
   });
 
   it("notifies state change to listeners", () => {
-    const store = new Store(0);
+    const store = createStore(0);
     const listener = jest.fn();
 
     store.subscribe(listener);
@@ -55,7 +55,7 @@ describe("store", () => {
   });
 
   it("does not notify when next state is equal to previous state", () => {
-    const store = new Store(0);
+    const store = createStore(0);
     const listener = jest.fn();
 
     store.subscribe(listener);
@@ -65,7 +65,7 @@ describe("store", () => {
   });
 
   it("does not notify to unsubscribed listener", () => {
-    const store = new Store(0);
+    const store = createStore(0);
     const listener = jest.fn();
     const unsubscribe = store.subscribe(listener);
 
