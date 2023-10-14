@@ -4,7 +4,9 @@
     "module": "ESNext",
     "moduleResolution": "NodeNext",
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
-    "strict": true
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true
   },
   "include": ["./src"]
 }
