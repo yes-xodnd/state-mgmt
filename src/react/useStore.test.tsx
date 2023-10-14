@@ -1,5 +1,5 @@
 import * as React from "react";
-import { fireEvent, render } from "@testing-library/react";
+import { act, fireEvent, render } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
 import createStore from "../createStore";
@@ -45,7 +45,10 @@ describe("useStore", () => {
     };
 
     const { findByText } = render(<Counter />);
-    counterStore.setState((state) => state + 1);
+
+    act(() => {
+      counterStore.setState((state) => state + 1);
+    });
     const text = await findByText("count: 1");
 
     expect(text).toBeInTheDocument();
@@ -70,7 +73,10 @@ describe("useStore", () => {
 
     const { findByText } = render(<Counter />);
     const button = await findByText("increment");
-    fireEvent.click(button);
+
+    act(() => {
+      fireEvent.click(button);
+    });
 
     const text = await findByText("count: 1");
     expect(text).toBeInTheDocument();
