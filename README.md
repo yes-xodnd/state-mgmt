@@ -32,7 +32,7 @@ export const counterActions = {
 export useCounterStore = createHook(counterStore);
 
 // Counter.tsx
-import { useCounterStore, counterActions } from './CounterStore.ts';
+import { useCounterStore, counterActions } from './counterStore.ts';
 
 const Counter = () => {
   const count = useCounterStore();
